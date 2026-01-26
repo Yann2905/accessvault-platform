@@ -14,7 +14,7 @@ RETRY_COUNT=0
 
 until php -r "
 try {
-    \$pdo = new PDO(
+    new PDO(
         'mysql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT'),
         getenv('DB_USERNAME'),
         getenv('DB_PASSWORD'),
@@ -27,12 +27,12 @@ try {
     exit(1);
 }
 "; do
-  RETRY_COUNT=\$((RETRY_COUNT + 1))
-  if [ \$RETRY_COUNT -ge \$MAX_RETRIES ]; then
-    echo "Max retries (\$MAX_RETRIES) reached. Exiting."
+  RETRY_COUNT=$((RETRY_COUNT + 1))
+  if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+    echo "Max retries ($MAX_RETRIES) reached. Exiting."
     exit 1
   fi
-  echo "Database not ready, retrying... (\$RETRY_COUNT/\$MAX_RETRIES)"
+  echo "Database not ready, retrying... ($RETRY_COUNT/$MAX_RETRIES)"
   sleep 2
 done
 
@@ -43,20 +43,4 @@ php artisan migrate --force
 
 echo "Starting application..."
 
-php artisan serve --host=0.0.0.0 --port=\$PORT
-```
-
----
-
-## **ÉTAPE 6 : Vérifier le `.gitignore`**
-
-### 🔧 **Où ?** Dans votre projet sur votre ordinateur
-
-### 📁 **Fichier** : `.gitignore` (à la racine de votre projet)
-
-### ✏️ **Vérifiez que ces lignes existent :**
-```
-.env
-.env.local
-.env.production
-.env.*.local
+php artisan serve --host=0.0.0.0 --port=$PORT
