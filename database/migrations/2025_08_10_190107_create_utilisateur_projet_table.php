@@ -11,7 +11,7 @@ class CreateUtilisateurProjetTable extends Migration
         Schema::create('utilisateur_projet', function (Blueprint $table) {
             $table->unsignedBigInteger('utilisateur_id');
             $table->unsignedBigInteger('projet_id');
-            $table->timestamp();
+            $table->timestamps();
 
             $table->primary(['utilisateur_id', 'projet_id']);
 
