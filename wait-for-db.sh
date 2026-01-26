@@ -1,19 +1,25 @@
 #!/bin/sh
 
-echo "Waiting for database to be ready..."
+echo "Waiting for database..."
 
-# Attendre que le port MySQL soit ouvert
-while ! nc -z $DB_HOST $DB_PORT; do
+until php -r "
+try {
+    new PDO(
+        'mysql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT'),
+        getenv('DB_USERNAME'),
+        getenv('DB_PASSWORD')
+    );
+    exit(0);
+} catch (Exception \$e) {
+    exit(1);
+}
+"; do
+  echo "Database not ready, retrying..."
   sleep 2
 done
 
-echo "Database is ready!"
+echo "Database ready!"
 
-# Lancer les migrations
 php artisan migrate --force
 
-# Seed uniquement si tu as un seeder
-# php artisan db:seed --force
-
-# Lancer Laravel
 php artisan serve --host=0.0.0.0 --port=$PORT
