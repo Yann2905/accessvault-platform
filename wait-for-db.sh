@@ -1,14 +1,19 @@
 #!/bin/sh
 
-# Attendre la DB
-until php artisan migrate:status > /dev/null 2>&1; do
-  echo "Waiting for database..."
+echo "Waiting for database to be ready..."
+
+# Attendre que le port MySQL soit ouvert
+while ! nc -z $DB_HOST $DB_PORT; do
   sleep 2
 done
 
-# Migrer et seed (optionnel)
-php artisan migrate --force
-php artisan db:seed --class=ProjectSeeder --force
+echo "Database is ready!"
 
-# Lancer Laravel sur le port Railway
+# Lancer les migrations
+php artisan migrate --force
+
+# Seed uniquement si tu as un seeder
+# php artisan db:seed --force
+
+# Lancer Laravel
 php artisan serve --host=0.0.0.0 --port=$PORT
