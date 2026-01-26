@@ -37,9 +37,9 @@ try {
 done
 
 echo "Database ready!"
-echo "Running migrations..."
+echo "Resetting database..."
 
-php artisan migrate --force
+php artisan migrate:fresh --force  # ⬅️ AJOUT : Reset complet de la DB
 
 echo "Starting application..."
 
