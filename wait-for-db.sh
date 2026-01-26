@@ -37,9 +37,17 @@ try {
 done
 
 echo "Database ready!"
-echo "Resetting database..."
+echo "Running migrations..."
 
-php artisan migrate:fresh --force  # ⬅️ AJOUT : Reset complet de la DB
+php artisan migrate --force
+
+echo "Building assets..."
+npm run build  # ⬅️ AJOUT : Compile les assets avec Vite
+
+echo "Optimizing Laravel..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
 echo "Starting application..."
 
