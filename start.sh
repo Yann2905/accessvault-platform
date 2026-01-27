@@ -8,10 +8,15 @@ echo "========================================="
 
 echo ""
 echo "🔧 Configuration du port Nginx..."
-# Générer la config Nginx avec le bon port
-envsubst '$PORT' < /etc/nginx/nginx.template > /etc/nginx/sites-available/default
+
+# Utiliser sed pour remplacer PORT dans le template
+sed "s/\${PORT}/${PORT}/g" /etc/nginx/nginx.template > /etc/nginx/sites-available/default
 
 echo "Port configuré : $PORT"
+
+# Vérifier que le port a bien été remplacé
+echo "Vérification de la configuration Nginx :"
+grep "listen" /etc/nginx/sites-available/default
 
 echo ""
 echo "=== Configuration Database ==="
@@ -65,6 +70,13 @@ echo "🌱 Initialisation des données..."
 php artisan db:seed --force
 
 echo ""
+echo "⚡ Nettoyage des caches..."
+php artisan config:clear
+php artisan route:clear  
+php artisan view:clear
+php artisan cache:clear
+
+echo ""
 echo "⚡ Optimisation de Laravel..."
 php artisan config:cache
 php artisan route:cache
@@ -73,6 +85,10 @@ php artisan view:cache
 echo ""
 echo "🚀 Démarrage de PHP-FPM..."
 php-fpm -D
+
+echo ""
+echo "🔍 Affichage des logs Nginx en temps réel..."
+tail -f /var/log/nginx/access.log /var/log/nginx/error.log &
 
 echo ""
 echo "🌐 Démarrage de Nginx sur le port $PORT..."
