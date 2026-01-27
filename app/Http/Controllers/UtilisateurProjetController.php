@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Acces;
-use App\Models\environnement;
+use App\Models\Environnement;
 
 
 class UtilisateurProjetController extends Controller

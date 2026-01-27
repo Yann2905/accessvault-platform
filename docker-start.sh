@@ -14,6 +14,10 @@ echo "DB_DATABASE: ${DB_DATABASE}"
 echo "===================="
 
 echo ""
+echo "🔧 Regénération de l'autoload Composer..."
+composer dump-autoload --optimize --no-dev
+
+echo ""
 echo "⏳ Attente base de données..."
 
 MAX_RETRIES=30
@@ -50,6 +54,13 @@ php artisan migrate --force
 echo ""
 echo "🌱 Seeders..."
 php artisan db:seed --force
+
+echo ""
+echo "⚡ Nettoyage des caches..."
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan cache:clear
 
 echo ""
 echo "⚡ Optimisation..."
