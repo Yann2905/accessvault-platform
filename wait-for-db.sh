@@ -41,8 +41,8 @@ echo "Running migrations..."
 
 php artisan migrate --force
 
-echo "Building assets..."
-npm run build  # ⬅️ AJOUT : Compile les assets avec Vite
+echo "Seeding database..."
+php artisan db:seed --force  # ⬅️ AJOUT : Exécute les seeders
 
 echo "Optimizing Laravel..."
 php artisan config:cache
