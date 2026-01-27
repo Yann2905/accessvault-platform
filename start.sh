@@ -7,6 +7,13 @@ echo "  GS2E - Démarrage de l'application"
 echo "========================================="
 
 echo ""
+echo "🔧 Configuration du port Nginx..."
+# Générer la config Nginx avec le bon port
+envsubst '$PORT' < /etc/nginx/nginx.template > /etc/nginx/sites-available/default
+
+echo "Port configuré : $PORT"
+
+echo ""
 echo "=== Configuration Database ==="
 echo "DB_HOST: ${DB_HOST}"
 echo "DB_PORT: ${DB_PORT}"
@@ -68,31 +75,10 @@ echo "🚀 Démarrage de PHP-FPM..."
 php-fpm -D
 
 echo ""
-echo "🌐 Démarrage de Nginx..."
+echo "🌐 Démarrage de Nginx sur le port $PORT..."
 echo "========================================="
-echo "  ✅ Application prête sur le port 8080"
+echo "  ✅ Application prête sur le port $PORT"
 echo "========================================="
 
 # Démarrer Nginx en mode foreground
 nginx -g 'daemon off;'
-```
-
----
-
-## **ÉTAPE 4 : Vérifier votre `.dockerignore`**
-
-**Créez ou modifiez** `.dockerignore` à la racine :
-```
-.git
-.env
-.env.backup
-.env.production
-node_modules
-vendor
-storage/logs/*
-storage/framework/cache/*
-storage/framework/sessions/*
-storage/framework/views/*
-bootstrap/cache/*
-.DS_Store
-Thumbs.db

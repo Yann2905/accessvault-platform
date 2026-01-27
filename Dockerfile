@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Installer les dépendances système
+# Installer les dépendances système (avec gettext pour envsubst)
 RUN apt-get update && apt-get install -y \
     nginx \
     git \
@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
+    gettext \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -25,12 +26,8 @@ COPY . /app
 # Installer les dépendances PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Copier la configuration Nginx
-COPY nginx.conf /etc/nginx/sites-available/default
-
-# Créer les liens symboliques Nginx
-RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default \
-    && rm -f /etc/nginx/sites-enabled/default.dpkg-dist
+# Copier le template Nginx
+COPY nginx.template /etc/nginx/nginx.template
 
 # Permissions pour Laravel
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
@@ -40,8 +37,8 @@ RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Exposer le port
-EXPOSE 8080
+# Exposer le port (dynamique via $PORT)
+EXPOSE $PORT
 
 # Lancer le script de démarrage
 CMD ["/start.sh"]
