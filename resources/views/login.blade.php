@@ -39,10 +39,12 @@
 	<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Connexion Admin</title>
+    <title>Connexion </title>
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body id="kt_body" class="app-blank">
 	@if (session('alert'))
     <div id="custom-modal" style="
