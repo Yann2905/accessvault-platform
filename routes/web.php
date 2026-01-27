@@ -13,7 +13,7 @@ use App\Models\acces;
 use App\Http\Controllers\AccesController;
 use App\Http\Controllers\UtilisateurProjetController;
 use App\Http\Controllers\EnvironnementController;
-use App\Models\environnement;
+use App\Models\Environnement;
 
 
 // ========================================
