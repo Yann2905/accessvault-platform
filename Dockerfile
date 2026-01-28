@@ -1,7 +1,8 @@
 FROM php:8.2-apache
 
-# Activer mod_rewrite
-RUN a2enmod rewrite
+# Désactiver tous les MPM sauf prefork
+RUN a2dismod mpm_event mpm_worker || true
+RUN a2enmod mpm_prefork rewrite
 
 # Installer les extensions PHP
 RUN apt-get update && apt-get install -y \
@@ -28,8 +29,7 @@ COPY . /app
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Configurer Apache pour pointer vers public/
-RUN sed -i 's!/var/www/html!/app/public!g' /etc/apache2/sites-available/000-default.conf \
-    && sed -i 's!DocumentRoot /var/www/html!DocumentRoot /app/public!g' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's!/var/www/html!/app/public!g' /etc/apache2/sites-available/000-default.conf
 
 # Ajouter la config Apache pour Laravel
 RUN echo '<Directory /app/public>\n\
