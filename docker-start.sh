@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 echo "========================================="
@@ -22,7 +21,7 @@ RETRY_COUNT=0
 until php -r "
 try {
     new PDO(
-        'mysql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT'),
+        'pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_DATABASE'),
         getenv('DB_USERNAME'),
         getenv('DB_PASSWORD'),
         [PDO::ATTR_TIMEOUT => 5]
@@ -58,6 +57,5 @@ php artisan route:cache
 php artisan view:cache
 
 echo ""
-echo "🚀 Démarrage Apache..."
-
-exec apache2-foreground
+echo "🚀 Démarrage Supervisord (PHP-FPM + Nginx)..."
+exec /usr/bin/supervisord -n
