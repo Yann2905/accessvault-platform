@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-class Documentcontroller extends Controller
+class DocumentController extends Controller  // Majuscules sur D et C
 {
      /**
      * Afficher la liste de tous les documents

@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
-
+namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Utilisateur; // On inclut le modèle User
 use Illuminate\Support\Facades\Hash;
