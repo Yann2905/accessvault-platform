@@ -15,8 +15,15 @@ echo "===================="
 
 echo ""
 echo "🔧 Regénération de l'autoload Composer..."
-composer dump-autoload --optimize --no-dev
+echo "🗑️ Suppression du cache Composer..."
+rm -rf vendor/
+rm -f composer.lock
 
+echo "📦 Réinstallation des dépendances..."
+composer install --no-dev --optimize-autoloader --no-interaction
+
+echo "🔧 Regénération de l'autoload..."
+composer dump-autoload --optimize --no-dev
 echo ""
 echo "⏳ Attente base de données..."
 
