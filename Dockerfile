@@ -1,8 +1,10 @@
-FROM php:8.2-fpm
+FROM php:8.2-apache
 
-# Installer les dépendances système (avec gettext pour envsubst)
+# Activer mod_rewrite
+RUN a2enmod rewrite
+
+# Installer les extensions PHP
 RUN apt-get update && apt-get install -y \
-    nginx \
     git \
     curl \
     libpng-dev \
@@ -10,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    gettext \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -20,25 +21,32 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers du projet
+# Copier les fichiers
 COPY . /app
 
-# Installer les dépendances PHP
+# Installer les dépendances
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Copier le template Nginx
-COPY nginx.template /etc/nginx/nginx.template
+# Configurer Apache pour pointer vers public/
+RUN sed -i 's!/var/www/html!/app/public!g' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's!DocumentRoot /var/www/html!DocumentRoot /app/public!g' /etc/apache2/sites-available/000-default.conf
 
-# Permissions pour Laravel
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache \
+# Ajouter la config Apache pour Laravel
+RUN echo '<Directory /app/public>\n\
+    Options Indexes FollowSymLinks\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>' >> /etc/apache2/sites-available/000-default.conf
+
+# Permissions
+RUN chown -R www-data:www-data /app \
     && chmod -R 775 /app/storage /app/bootstrap/cache
 
 # Copier le script de démarrage
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+COPY docker-start.sh /docker-start.sh
+RUN chmod +x /docker-start.sh
 
-# Exposer le port (dynamique via $PORT)
-EXPOSE $PORT
+# Exposer le port
+EXPOSE 80
 
-# Lancer le script de démarrage
-CMD ["/start.sh"]
+CMD ["/docker-start.sh"]
