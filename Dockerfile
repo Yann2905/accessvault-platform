@@ -1,10 +1,10 @@
 FROM php:8.2-apache
 
-# IMPORTANT : Désactiver les MPM qui causent des conflits
-RUN a2dismod mpm_event mpm_worker 2>/dev/null || true && a2enmod rewrite
+# Forcer un seul MPM pour éviter les conflits
+RUN rm -f /etc/apache2/mods-enabled/mpm_* \
+    && a2enmod mpm_prefork rewrite
 
-
-# Installer les extensions PHP
+# Installer les dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -19,26 +19,26 @@ RUN apt-get update && apt-get install -y \
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Répertoire de travail
+# Définir le répertoire de travail
 WORKDIR /app
 
 # Copier les fichiers
 COPY . /app
 
-# Installer les dépendances
+# Installer les dépendances Laravel
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Configurer Apache pour Laravel
 RUN sed -i 's!/var/www/html!/app/public!g' /etc/apache2/sites-available/000-default.conf
 
-# Configuration Apache pour Laravel
+# Autoriser .htaccess
 RUN echo '<Directory /app/public>\n\
     Options Indexes FollowSymLinks\n\
     AllowOverride All\n\
     Require all granted\n\
 </Directory>' >> /etc/apache2/sites-available/000-default.conf
 
-# Permissions
+# Permissions Laravel
 RUN chown -R www-data:www-data /app \
     && chmod -R 775 /app/storage /app/bootstrap/cache
 
