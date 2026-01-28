@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Installer dépendances système
+# Installer dépendances système + PostgreSQL dev pour pdo_pgsql
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nginx \
     supervisor \
-    && docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd    \
+    libpq-dev \   # <- indispensable pour PostgreSQL
+    && docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installer Composer
@@ -25,10 +26,8 @@ COPY . /app
 # Installer dépendances Laravel
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Configuration Nginx
+# Copier config Nginx & supervisord
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-
-# Configuration Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Permissions
