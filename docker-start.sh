@@ -14,17 +14,6 @@ echo "DB_DATABASE: ${DB_DATABASE}"
 echo "===================="
 
 echo ""
-echo "🔧 Regénération de l'autoload Composer..."
-echo "🗑️ Suppression du cache Composer..."
-rm -rf vendor/
-rm -f composer.lock
-
-echo "📦 Réinstallation des dépendances..."
-composer install --no-dev --optimize-autoloader --no-interaction
-
-echo "🔧 Regénération de l'autoload..."
-composer dump-autoload --optimize --no-dev
-echo ""
 echo "⏳ Attente base de données..."
 
 MAX_RETRIES=30
@@ -63,20 +52,13 @@ echo "🌱 Seeders..."
 php artisan db:seed --force
 
 echo ""
-echo "⚡ Nettoyage des caches..."
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan cache:clear
-
-echo ""
 echo "⚡ Optimisation..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
 echo ""
-echo "🚀 Démarrage Apache..."
+echo "🚀 Démarrage Apache sur le port ${PORT}..."
 
 # Configurer le port Apache
 sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
