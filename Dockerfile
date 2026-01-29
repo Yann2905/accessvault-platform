@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
     nginx \
     supervisor \
     libpq-dev \
-    && docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd \
+    gettext \
+    && docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath gd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -35,7 +36,7 @@ COPY . /app
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Copier la config Nginx et Supervisord
-COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Permissions Laravel

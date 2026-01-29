@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -82,8 +82,9 @@ return [
             ]) : [],
         ],
 
-        'pgsql' => [
+      'pgsql' => [
     'driver' => 'pgsql',
+    'url' => env('DATABASE_URL'), // ✅ Render fournit DATABASE_URL
     'host' => env('DB_HOST', '127.0.0.1'),
     'port' => env('DB_PORT', '5432'),
     'database' => env('DB_DATABASE', 'forge'),
@@ -92,7 +93,7 @@ return [
     'charset' => 'utf8',
     'prefix' => '',
     'prefix_indexes' => true,
-    'schema' => 'public',
+    'search_path' => 'public',
     'sslmode' => 'prefer',
 ],
 
