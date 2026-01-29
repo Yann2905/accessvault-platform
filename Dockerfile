@@ -20,6 +20,11 @@ RUN apt-get update && apt-get install -y \
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# ⚠️ IMPORTANT: Configurer PHP-FPM pour écouter sur TCP au lieu d'un socket Unix
+RUN sed -i 's|listen = /run/php/php8.2-fpm.sock|listen = 127.0.0.1:9000|g' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's|;listen.owner = www-data|listen.owner = www-data|g' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's|;listen.group = www-data|listen.group = www-data|g' /usr/local/etc/php-fpm.d/www.conf
+
 # Définir le répertoire de travail
 WORKDIR /app
 
@@ -35,10 +40,16 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Permissions Laravel
 RUN chown -R www-data:www-data /app \
-    && chmod -R 775 /app/storage /app/bootstrap/cache
+    && chmod -R 775 /app/storage /app/bootstrap/cache \
+    && mkdir -p /var/log/supervisor /run/php \
+    && chown -R www-data:www-data /var/log/supervisor
 
-# Exposer le port web
-EXPOSE 80
+# Copier le script de démarrage
+COPY docker/start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Lancer supervisord qui gère PHP-FPM + Nginx
-CMD ["/usr/bin/supervisord", "-n"]
+# Exposer le port web (10000 pour Render)
+EXPOSE 10000
+
+# Lancer le script de démarrage
+CMD ["/start.sh"]
