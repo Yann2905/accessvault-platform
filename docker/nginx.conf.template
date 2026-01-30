@@ -1,3 +1,4 @@
+# Utilisateur exécutant Nginx
 user www-data;
 worker_processes auto;
 pid /run/nginx.pid;
@@ -23,29 +24,50 @@ http {
     client_max_body_size 20M;
 
     gzip on;
-    gzip_types text/plain text/css application/json application/javascript;
+    gzip_types text/plain text/css application/json application/javascript application/font-woff application/font-woff2 image/svg+xml;
 
     server {
         listen ${PORT};
         server_name _;
         root /app/public;
-        index index.php;
+        index index.php index.html;
 
+        # -----------------------
+        # 🔹 Fichiers statiques
+        # -----------------------
+        location ~* \.(?:css|js|png|jpg|jpeg|gif|ico|svg|woff2?|ttf|eot)$ {
+            root /app/public;
+            try_files $uri =404;
+            access_log off;
+            expires 30d;
+        }
+
+        # -----------------------
+        # 🔹 Laravel
+        # -----------------------
         location / {
             try_files $uri $uri/ /index.php?$query_string;
         }
 
+        # -----------------------
+        # 🔹 Favicon & Robots
+        # -----------------------
         location = /favicon.ico { access_log off; log_not_found off; }
         location = /robots.txt  { access_log off; log_not_found off; }
 
-      location ~ \.php$ {
-    fastcgi_pass 127.0.0.1:9000;
-    fastcgi_index index.php;
-    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    include fastcgi_params;
-}
+        # -----------------------
+        # 🔹 PHP-FPM
+        # -----------------------
+        location ~ \.php$ {
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
 
-
+        # -----------------------
+        # 🔹 Sécurité
+        # -----------------------
         location ~ /\.(?!well-known).* {
             deny all;
         }
