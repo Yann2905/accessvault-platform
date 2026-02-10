@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
 {
     Schema::table('utilisateurs', function (Blueprint $table) {
-        $table->string('avatar')->nullable()->after('email'); 
+        $table->string('avatar_url')->nullable()->after('email'); 
     });
 }
 

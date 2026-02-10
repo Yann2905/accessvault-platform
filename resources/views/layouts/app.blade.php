@@ -160,69 +160,45 @@ License: For each use you must have a valid license purchased only from above li
 							<!--begin::User menu-->
 							<div class="ms-3">
 								<div class="cursor-pointer position-relative symbol symbol-circle symbol-40px" 
-										data-kt-menu-trigger="{default: 'click', lg: 'hover'}" 
-										data-kt-menu-attach="parent" 
-										data-kt-menu-placement="bottom-end">
-										@php
-											// Chemin de l'avatar avec fallback
-											$avatarPath = 'assets/media/avatars/blank.jpg'; // Par défaut
-											
-											if (Auth::user()->avatar) {
-												// Essayer storage/avatars/ (lien symbolique)
-												$storagePath = 'storage/avatars/' . Auth::user()->avatar;
-												
-												// Essayer public/avatars/ (upload direct)
-												$publicPath = 'avatars/' . Auth::user()->avatar;
-												
-												// Vérifier quel fichier existe
-												if (file_exists(public_path($storagePath))) {
-													$avatarPath = $storagePath;
-												} elseif (file_exists(public_path($publicPath))) {
-													$avatarPath = $publicPath;
-												}
-											}
-										@endphp
+									data-kt-menu-trigger="{default: 'click', lg: 'hover'}" 
+									data-kt-menu-attach="parent" 
+									data-kt-menu-placement="bottom-end">
 
-										<img src="{{ asset($avatarPath) }}" 
-											alt="{{ Auth::user()->nom ?? 'User' }}" 
-											class="w-100"
-											onerror="this.onerror=null; this.src='{{ asset('assets/media/avatars/blank.jpg') }}';">
+									@php
+										// Utiliser l'URL de l'avatar ou le fallback
+										$avatarUrl = Auth::user()->avatar_url ?? asset('assets/media/avatars/blank.jpg');
+									@endphp
 
-										
+									<img src="{{ $avatarUrl }}" 
+										alt="{{ Auth::user()->nom ?? 'User' }}" 
+										class="w-100"
+										onerror="this.onerror=null; this.src='{{ asset('assets/media/avatars/blank.jpg') }}';">
 
-										<!-- Cercle vert pour statut en ligne -->
-										<div class="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
-								    </div>
+									<!-- Cercle vert pour statut en ligne -->
+									<div class="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
+								</div>
+
 								<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
-									<!--begin::Menu item-->
+									<!-- Menu item -->
 									<div class="menu-item px-3">
 										<div class="menu-content d-flex align-items-center px-3">
-											<!--begin::Avatar-->
+											<!-- Avatar -->
 											<div class="symbol symbol-50px me-5">
-												<img src="{{ asset($avatarPath) }}" alt="logo" />
-											    </div>
-											<!--end::Avatar-->
-											<!--begin::Username-->
+												<img src="{{ $avatarUrl }}" alt="Avatar" />
+											</div>
+											<!-- Username -->
 											<div class="d-flex flex-column">
-												
 												<div class="fw-bold d-flex align-items-center fs-5">
 													{{ Auth::user()->nom }} 
 													<span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Pro</span>
 												</div>
 												<a href="#" class="fw-semibold text-muted text-hover-primary fs-7">{{ Auth::user()->email }}</a>
 											</div>
-
-											<!--end::Username-->
 										</div>
 									</div>
-									<!--end::Menu item-->
-									<!--begin::Menu separator-->
-									
-									<!--end::Menu item-->
 								</div>
-								<!--end::User account menu-->
-								<!--end::Menu wrapper-->
 							</div>
+
 							<!--end::User menu-->
 						</div>
 						<!--end::Logo-->
