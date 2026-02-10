@@ -13,18 +13,18 @@ echo "===================="
 
 # Vérifier que les variables obligatoires sont définies
 if [ -z "$APP_KEY" ]; then
-    echo "❌ ERREUR: APP_KEY n'est pas défini!"
+    echo " ERREUR: APP_KEY n'est pas défini!"
     exit 1
 fi
 
 if [ -z "$DATABASE_URL" ]; then
-    echo "❌ ERREUR: DATABASE_URL n'est pas défini!"
+    echo " ERREUR: DATABASE_URL n'est pas défini!"
     echo "Assurez-vous d'avoir lié votre base de données PostgreSQL sur Render"
     exit 1
 fi
 
 echo ""
-echo "⏳ Attente base de données PostgreSQL..."
+echo " Attente base de données PostgreSQL..."
 
 MAX_RETRIES=30
 RETRY_COUNT=0
@@ -60,40 +60,47 @@ try {
 "; do
   RETRY_COUNT=$((RETRY_COUNT + 1))
   if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-    echo "❌ Échec connexion DB après $MAX_RETRIES tentatives"
+    echo " Échec connexion DB après $MAX_RETRIES tentatives"
     exit 1
   fi
   echo "Tentative $RETRY_COUNT/$MAX_RETRIES..."
   sleep 2
 done
 
-echo "✅ DB PostgreSQL connectée"
+echo " DB PostgreSQL connectée"
 
 echo ""
 echo "🔄 Migrations..."
 php artisan migrate --force || {
-    echo "❌ Erreur lors des migrations"
+    echo " Erreur lors des migrations"
     exit 1
 }
 
 echo ""
-echo "🌱 Seeders..."
+echo " Seeders..."
 php artisan db:seed --force || {
-    echo "⚠️ Seeders ignorés (peut-être déjà exécutés)"
+    echo " Seeders ignorés (peut-être déjà exécutés)"
 }
 
 echo ""
-echo "⚡ Optimisation Laravel..."
+echo " Nettoyage du cache..."
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan cache:clear
+
+echo ""
+echo " Optimisation Laravel..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
 echo ""
-echo "🚀 Démarrage Supervisord..."
+echo " Démarrage Supervisord..."
 echo ""
-echo "🔧 Génération de la configuration Nginx avec PORT=${PORT:-10000}..."
+echo " Génération de la configuration Nginx avec PORT=${PORT:-10000}..."
 export PORT=${PORT:-10000}
 envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
-echo "✅ Nginx configuré pour écouter sur le port $PORT"
+echo " Nginx configuré pour écouter sur le port $PORT"
 exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf
