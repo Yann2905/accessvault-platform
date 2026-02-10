@@ -166,7 +166,7 @@ License: For each use you must have a valid license purchased only from above li
 
 									@php
 										// Utiliser l'URL de l'avatar ou le fallback
-										$avatarUrl = Auth::user()->avatar_url ?? asset('assets/media/avatars/blank.jpg');
+										$avatarUrl = Auth::user()->avatar_url ?? asset('assets/media/avatars/blank.png');
 									@endphp
 
 									<img src="{{ $avatarUrl }}" 
