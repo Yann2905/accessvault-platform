@@ -163,15 +163,32 @@ License: For each use you must have a valid license purchased only from above li
 										data-kt-menu-trigger="{default: 'click', lg: 'hover'}" 
 										data-kt-menu-attach="parent" 
 										data-kt-menu-placement="bottom-end">
-     
 										@php
-											// Vérifie si l'utilisateur a un avatar et si le fichier existe
-											$avatarPath = (Auth::user()->avatar && file_exists(public_path('avatars/' . Auth::user()->avatar)))
-														? 'avatars/' . Auth::user()->avatar
-														: 'assets/media/avatars/blank.jpg';
+											// Déterminer le chemin de l'avatar
+											if (Auth::user()->avatar) {
+												// Essayer d'abord dans storage/avatars
+												$storagePath = 'storage/avatars/' . Auth::user()->avatar;
+												
+												// Sinon essayer dans public/avatars (fallback)
+												$publicPath = 'avatars/' . Auth::user()->avatar;
+												
+												if (file_exists(public_path($storagePath))) {
+													$avatarPath = $storagePath;
+												} elseif (file_exists(public_path($publicPath))) {
+													$avatarPath = $publicPath;
+												} else {
+													// Image par défaut si aucune n'existe
+													$avatarPath = 'assets/media/avatars/blank.jpg';
+												}
+											} else {
+												$avatarPath = 'assets/media/avatars/blank.jpg';
+											}
 										@endphp
 
-										<img src="{{ asset($avatarPath) }}" alt="{{ Auth::user()->nom }}" class="w-100" />
+										<img src="{{ asset($avatarPath) }}" 
+											alt="{{ Auth::user()->nom }}" 
+											class="w-100" 
+											onerror="this.src='{{ asset('assets/media/avatars/blank.jpg') }}'">
 
 										<!-- Cercle vert pour statut en ligne -->
 										<div class="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
