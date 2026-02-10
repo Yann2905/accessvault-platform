@@ -164,31 +164,31 @@ License: For each use you must have a valid license purchased only from above li
 										data-kt-menu-attach="parent" 
 										data-kt-menu-placement="bottom-end">
 										@php
-											// Déterminer le chemin de l'avatar
+											// Chemin de l'avatar avec fallback
+											$avatarPath = 'assets/media/avatars/blank.jpg'; // Par défaut
+											
 											if (Auth::user()->avatar) {
-												// Essayer d'abord dans storage/avatars
+												// Essayer storage/avatars/ (lien symbolique)
 												$storagePath = 'storage/avatars/' . Auth::user()->avatar;
 												
-												// Sinon essayer dans public/avatars (fallback)
+												// Essayer public/avatars/ (upload direct)
 												$publicPath = 'avatars/' . Auth::user()->avatar;
 												
+												// Vérifier quel fichier existe
 												if (file_exists(public_path($storagePath))) {
 													$avatarPath = $storagePath;
 												} elseif (file_exists(public_path($publicPath))) {
 													$avatarPath = $publicPath;
-												} else {
-													// Image par défaut si aucune n'existe
-													$avatarPath = 'assets/media/avatars/blank.jpg';
 												}
-											} else {
-												$avatarPath = 'assets/media/avatars/blank.jpg';
 											}
 										@endphp
 
 										<img src="{{ asset($avatarPath) }}" 
-											alt="{{ Auth::user()->nom }}" 
-											class="w-100" 
-											onerror="this.src='{{ asset('assets/media/avatars/blank.jpg') }}'">
+											alt="{{ Auth::user()->nom ?? 'User' }}" 
+											class="w-100"
+											onerror="this.onerror=null; this.src='{{ asset('assets/media/avatars/blank.jpg') }}';">
+
+										
 
 										<!-- Cercle vert pour statut en ligne -->
 										<div class="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
