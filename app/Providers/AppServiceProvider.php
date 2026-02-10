@@ -21,5 +21,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
+
+         // Force HTTPS en production
+         if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
