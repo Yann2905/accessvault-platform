@@ -308,7 +308,7 @@ License: For each use you must have a valid license purchased only from above li
 										@php
 											$avatarPath = (Auth::user()->avatar && file_exists(public_path('avatars/' . Auth::user()->avatar)))
 												? 'avatars/' . Auth::user()->avatar
-												: 'assets/media/avatars/blank.jpg';
+												: 'assets/media/avatars/blank.png';
 										@endphp
 
 										<img src="{{ asset($avatarPath) }}" alt="{{ Auth::user()->nom }}" class="w-100" />

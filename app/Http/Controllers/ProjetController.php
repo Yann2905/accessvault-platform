@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProjetController extends Controller
 {
@@ -50,7 +51,7 @@ class ProjetController extends Controller
             $projet = Projet::create([
                 'nom' => $request->nom,
                 'description' => $request->description,
-                'statut' => $statut, // ✅ Utilise la version corrigée
+                'statut' => $statut,
                 'created_by' => Auth::id(),
             ]);
 
@@ -66,7 +67,6 @@ class ProjetController extends Controller
                 ->with('success', 'Projet créé avec succès !');
 
         } catch (\Exception $e) {
-            // 4️⃣ Log de l'erreur
             Log::error('Erreur création projet', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
@@ -95,7 +95,6 @@ class ProjetController extends Controller
 
     public function update(Request $request, $id)
     {
-        // 🔧 FIX: Remplacer les underscores par des espaces
         $statut = str_replace('_', ' ', $request->statut);
 
         $validator = Validator::make($request->all(), [
@@ -115,7 +114,7 @@ class ProjetController extends Controller
         $projet->update([
             'nom' => $request->nom,
             'description' => $request->description,
-            'statut' => $statut, // ✅ Utilise la version corrigée
+            'statut' => $statut,
             'updated_by' => Auth::id(),
         ]);
 
@@ -147,26 +146,55 @@ class ProjetController extends Controller
 
         $projet = Projet::findOrFail($id);
 
-        if ($projet->logo) {
-            $oldPath = public_path('logos/' . basename($projet->logo));
-            if (file_exists($oldPath)) {
-                unlink($oldPath);
+        try {
+            // Supprime l'ancien logo de Cloudinary si présent
+            if ($projet->logo) {
+                $publicId = $this->extractCloudinaryPublicId($projet->logo);
+                if ($publicId) {
+                    // FIX: Utilise la bonne syntaxe pour Cloudinary
+                    \Cloudinary\Uploader::destroy($publicId);
+                }
             }
+
+            //  Upload vers Cloudinary
+            $uploadedFile = $request->file('logo');
+            $uploadResult = $uploadedFile->storeOnCloudinary('projets/logos');
+
+            //  Sauvegarde l'URL Cloudinary dans la base
+            $projet->logo = $uploadResult->getSecurePath();
+            $projet->save();
+
+            Log::info('Logo mis à jour', [
+                'projet_id' => $projet->id,
+                'logo_url' => $projet->logo
+            ]);
+
+            return redirect()->back()
+                ->with('success', 'Logo mis à jour avec succès.');
+
+        } catch (\Exception $e) {
+            Log::error('Erreur upload logo', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                ->with('error', 'Erreur lors de la mise à jour du logo : ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Extrait le public_id d'une URL Cloudinary
+     */
+    private function extractCloudinaryPublicId($url)
+    {
+        if (!$url || strpos($url, 'cloudinary.com') === false) {
+            return null;
         }
 
-        $file = $request->file('logo');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $destinationPath = public_path('logos');
-
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0777, true);
-        }
-
-        $file->move($destinationPath, $filename);
-        $projet->logo = 'logos/' . $filename;
-        $projet->save();
-
-        return redirect()->back()
-            ->with('success', 'Logo mis à jour avec succès.');
+        // Exemple URL : https://res.cloudinary.com/demo/image/upload/v1234567890/projets/logos/abc123.jpg
+        // On veut : projets/logos/abc123
+        preg_match('/upload\/(?:v\d+\/)?(.+)\.\w+$/', $url, $matches);
+        return $matches[1] ?? null;
     }
 }
