@@ -1,929 +1,1035 @@
+
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'GS2E Dashboard') }}</title>
-    
-    <!-- Fonts - Google Fonts pour un design moderne -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Styles Bundle -->
-    <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet">
+
+<!--
+
+Author: Keenthemes
+
+Product Name: MetronicProduct Version: 8.2.5
+
+Purchase: https://1.envato.market/EA4JP
+
+Website: http://www.keenthemes.com
+
+Contact: support@keenthemes.com
+
+Follow: www.twitter.com/keenthemes
+
+Dribbble: www.dribbble.com/keenthemes
+
+Like: www.facebook.com/keenthemes
+
+License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
+
+-->
+
+<html lang="en">
+
+	<!--begin::Head-->
+
+	<head>
+<style>
+
+#kt_app_sidebar {
+			width: 250px !important;
+		}
+
+		#kt_app_wrapper {
+				position: relative;
+                 left: -75px; 
+				
+			}
+
+			#kt_app_content_container1 {
+    position: relative;
+	bottom: 150px;
+    left: -20px; /* décale vers la gauche */
+    top: -80px;   /* descend de 20px */
+
+}
+
+
+.card.border-hover-primary {
+    height: 250px; /* hauteur souhaitée */
+    overflow: hidden; /* coupe le contenu qui dépasse */
+	width: 240px !important;
+}
+
+#kt_app_content_container {
+    position: relative;
+    left:-120px; /* décale vers la gauche */
+    top: 30px;   /* descend de 20px */
+
+}
+
+
+.delete-form button {
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+}
+
+
+			/* Boutons btn-primary orange personnalisés */
+.btn-orange-primary,
+.btn-orange-primary.btn-active-light-primary,
+.btn-orange-primary.btn-focus {
+    background-color: #ff9900 !important;  /* orange de base */
+    border-color: #ff9900 !important;
+    color: #fff !important;                /* texte blanc */
+    box-shadow: none !important;           /* supprime le halo bleu */
+}
+
+/* Hover */
+.btn-orange-primary:hover,
+.btn-orange-primary.btn-active-light-primary:hover,
+.btn-orange-primary.btn-focus:hover {
+    background-color: #e68a00 !important; /* orange un peu plus foncé */
+    border-color: #e68a00 !important;
+    color: #fff !important;
+}
+
+/* Active / Focus / Focus-visible */
+.btn-orange-primary:focus,
+.btn-orange-primary:active,
+.btn-orange-primary:focus-visible,
+.btn-orange-primary.btn-active-light-primary:active,
+.btn-orange-primary.btn-focus:active {
+    background-color: #e68a00 !important;
+    border-color: #e68a00 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+			
+				
+</style>
+
+		
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+
+		<!--end::Fonts-->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!--begin::Vendor Stylesheets(used for this page only)-->
+
+		<link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet">
+
+		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet">
+
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet">
-    
-    <style>
-        /* ===================================================================
-           VARIABLES CSS POUR LE THEME MODERNE
-           =================================================================== */
-        :root {
-            /* Palette de couleurs professionnelle */
-            --primary-color: #1a73e8;
-            --primary-dark: #1557b0;
-            --primary-light: #e8f0fe;
-            --accent-orange: #ff9900;
-            --accent-orange-dark: #e68a00;
-            
-            /* Couleurs neutres modernes */
-            --bg-main: #f8f9fa;
-            --bg-card: #ffffff;
-            --text-primary: #202124;
-            --text-secondary: #5f6368;
-            --text-muted: #80868b;
-            --border-color: #e8eaed;
-            
-            /* Ombres élégantes */
-            --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            
-            /* Typographie moderne */
-            --font-primary: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-            
-            /* Espacements */
-            --sidebar-width: 280px;
-            --header-height: 70px;
-        }
 
-        /* ===================================================================
-           RESET ET STYLES DE BASE
-           =================================================================== */
-        * {
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: var(--font-primary);
-            background: var(--bg-main);
-            color: var(--text-primary);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
 
-        /* ===================================================================
-           SIDEBAR MODERNE
-           =================================================================== */
-        #kt_app_sidebar {
-            width: var(--sidebar-width) !important;
-            background: var(--bg-card);
-            border-right: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+		<!--end::Global Stylesheets Bundle-->
 
-        /* Logo section avec dégradé subtil */
-        #kt_app_sidebar_logo {
-            background: linear-gradient(135deg, var(--primary-light) 0%, #fff 100%);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1.5rem !important;
-        }
+		<script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 
-        /* Boutons de navigation modernisés */
-        #kt_app_sidebar .btn {
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.875rem;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-        }
+	</head>
 
-        #kt_app_sidebar .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-            background: var(--primary-light) !important;
-            border-color: var(--primary-color) !important;
-        }
+	<!--end::Head-->
 
-        #kt_app_sidebar .btn i {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
+	<!--begin::Body-->
 
-        /* Bouton déconnexion orange personnalisé */
-        .btn-orange-primary {
-            background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-orange-dark) 100%) !important;
-            border: none !important;
-            color: #fff !important;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-        }
+	<body id="kt_app_body" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" class="app-default">
 
-        .btn-orange-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
+		<!--begin::Theme mode setup on page load-->
 
-        /* ===================================================================
-           CARTES DE PROJETS MODERNISÉES
-           =================================================================== */
-        .card.border-hover-primary {
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: var(--bg-card);
-            height: auto;
-            min-height: 280px;
-            overflow: visible;
-            position: relative;
-        }
+		<script>var defaultThemeMode = "light"; var themeMode; if ( document.documentElement ) { if ( document.documentElement.hasAttribute("data-bs-theme-mode")) { themeMode = document.documentElement.getAttribute("data-bs-theme-mode"); } else { if ( localStorage.getItem("data-bs-theme") !== null ) { themeMode = localStorage.getItem("data-bs-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-bs-theme", themeMode); }</script>
 
-        .card.border-hover-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 16px;
-            padding: 2px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-orange));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+		<!--end::Theme mode setup on page load-->
 
-        .card.border-hover-primary:hover::before {
-            opacity: 1;
-        }
+		<!--begin::App-->
 
-        .card.border-hover-primary:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
-            border-color: transparent;
-        }
+		<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
 
-        .card-header {
-            background: transparent;
-            border-bottom: 1px solid var(--border-color);
-            padding: 1.5rem;
-        }
+			<!--begin::Page-->
 
-        .card-body {
-            padding: 1.5rem;
-        }
+			<div class="app-page flex-column flex-column-fluid" id="kt_app_page">
 
-        /* Badges de statut avec styles modernes */
-        .badge {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
+				<!--begin::Header-->
 
-        .badge-light-warning {
-            background: #fff3e0;
-            color: #f57c00;
-        }
+				<div id="kt_app_header" class="app-header" data-kt-sticky="true" data-kt-sticky-activate-="true" data-kt-sticky-name="app-header-sticky" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
 
-        .badge-light-success {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
+					<!--begin::Header container-->
 
-        .badge-light-danger {
-            background: #ffebee;
-            color: #c62828;
-        }
+					<div class="app-container container-xxl d-flex align-items-stretch justify-content-between" id="kt_app_header_container">
 
-        /* ===================================================================
-           DASHBOARD STATS CARDS
-           =================================================================== */
-        .stats-card {
-            border-radius: 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
-            height: 100%;
-        }
+						<!--begin::Header wrapper-->
 
-        .stats-card:hover {
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-4px);
-        }
+						<div id="kt_app_content_container" class="app-container container-xxl">
+								@if(Auth::user()->role==='utilisateur')
+											<!--begin::Toolbar-->
+											<div class="page-title d-flex flex-column justify-content-center me-3">
+										<!--begin::Title-->
+										<h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Mon Tableau de bord</h1>
+										<!--end::Title-->
+										<!--begin::Breadcrumb-->
+										<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+											
+											<!--end::Item-->
+											<!--begin::Item-->
+											<li class="breadcrumb-item text-muted">Mes projets ajoutés</li>
+											<!--end::Item-->
+										</ul>
+										<!--end::Breadcrumb-->
+									</div>
+												
+											<!--end::Toolbar-->
 
-        .stats-number {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+											<!--begin::Row-->
+											<div class="row g-6 g-xl-9">
+												@foreach($projets as $projet)
+													<div class="col-md-6 col-xl-4" id="projet-{{ $projet->id }}">
+														
+														<!--  Carte du projet -->
+														<div class="card project-card border-hover-primary "
+															data-url="{{ route('utilisateur.projets.show', ['projet' => $projet->id, 'from' => 'dashboard']) }}"
+															style="cursor: pointer;"> <!-- le style pointer montre que c’est cliquable -->
 
-        /* ===================================================================
-           CHART CANVAS FIX
-           =================================================================== */
-        #kt_project_list_chart {
-            max-width: 150px;
-            max-height: 150px;
-        }
+															<!-- En-tête de la carte -->
+															<div class="card-header border-0 pt-9">
+																<div class="card-title m-0">
+																	<div class="symbol symbol-50px w-50px bg-light">
+																		@php
+																			// On vérifie si le projet a un logo enregistré, sinon on affiche un logo par défaut
+																			$logo = ($projet->logo && file_exists(public_path($projet->logo))) 
+																				? asset($projet->logo) 
+																				: asset('assets/media/svg/brand-logos/volicity-9.svg');
+																		@endphp
+																		<img src="{{ $logo }}" alt="logo du projet" class="p-3" />
+																	</div>
+																</div>
 
-        .chart-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-        }
+																<!--  Statut du projet -->
+																<div class="card-toolbar">
+																	<span class="badge badge-light-{{ 
+																		$projet->statut === 'en_production' ? 'danger' : 
+																		($projet->statut === 'en_developpement' ? 'warning' : 'success') 
+																	}} fw-bold me-auto px-4 py-3">
+																		{{ ucfirst($projet->statut) }}
+																	</span>
+																</div>
+															</div>
 
-        /* ===================================================================
-           RESPONSIVE DESIGN MOBILE
-           =================================================================== */
-        @media (max-width: 991px) {
-            #kt_app_sidebar {
-                position: fixed;
-                left: -280px;
-                top: 0;
-                height: 100vh;
-                z-index: 1000;
-            }
+															<!--  Corps de la carte -->
+															<div class="card-body p-9">
+																<div class="fs-3 fw-bold text-gray-900">{{ $projet->nom }}</div>
+																<p class="text-gray-500 fw-semibold fs-5 mt-1 mb-7">
+																	{{ $projet->description }}
+																</p>
 
-            #kt_app_sidebar.drawer-on {
-                left: 0;
-            }
+																<!--  Boutons d'action -->
+																<div class="d-flex gap-2">
+																	<!--  Supprimer le projet -->
+																	<form action="{{ route('utilisateur.projets.destroy', $projet->id) }}"
+																		method="POST"
+																		class="delete-form"
+																		data-id="{{ $projet->id }}"
+																		data-nom="{{ $projet->nom }}"
+																		data-url="{{ route('index') }}">
+																		@csrf
+																		@method('DELETE')
+																		<button type="button"
+																				class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm btn-delete"
+																				data-bs-toggle="tooltip"
+																				title="Supprimer">
+																			<i class="ki-outline ki-trash fs-2"></i>
+																		</button>
+																	</form>
+																</div>
+															</div>
+															<!--  Fin du corps -->
 
-            #kt_app_wrapper {
-                margin-left: 0 !important;
-            }
-
-            #kt_app_content_container {
-                left: 0 !important;
-                padding: 1rem;
-            }
-
-            .card.border-hover-primary {
-                height: auto;
-                min-height: 250px;
-            }
-
-            .stats-number {
-                font-size: 2rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .col-lg-6.col-xxl-4 {
-                margin-bottom: 1.5rem;
-            }
-
-            .card-body {
-                padding: 1rem;
-            }
-
-            .stats-number {
-                font-size: 1.75rem;
-            }
-        }
-
-        /* ===================================================================
-           HEADER MODERNE
-           =================================================================== */
-        .page-heading {
-            font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin: 0;
-        }
-
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
-            margin: 0;
-        }
-
-        .breadcrumb-item {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* ===================================================================
-           BOUTONS D'ACTION
-           =================================================================== */
-        .btn-icon {
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-icon:hover {
-            transform: scale(1.1);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-delete:hover {
-            background: #ffebee !important;
-            color: #c62828 !important;
-        }
-
-        /* ===================================================================
-           ANIMATIONS
-           =================================================================== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card.border-hover-primary {
-            animation: fadeInUp 0.5s ease-out;
-        }
-
-        .stats-card {
-            animation: fadeInUp 0.5s ease-out;
-        }
-
-        /* Stagger animation pour les cartes */
-        .col-md-6:nth-child(1) .card,
-        .col-lg-6:nth-child(1) .stats-card {
-            animation-delay: 0.1s;
-        }
-
-        .col-md-6:nth-child(2) .card,
-        .col-lg-6:nth-child(2) .stats-card {
-            animation-delay: 0.2s;
-        }
-
-        .col-md-6:nth-child(3) .card,
-        .col-lg-6:nth-child(3) .stats-card {
-            animation-delay: 0.3s;
-        }
-
-        /* ===================================================================
-           TYPOGRAPHIE AMÉLIORÉE
-           =================================================================== */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-display);
-            font-weight: 600;
-        }
-
-        .fs-2hx {
-            font-family: var(--font-display);
-        }
-
-        /* ===================================================================
-           AVATAR UTILISATEUR
-           =================================================================== */
-        .symbol-circle {
-            border: 2px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .symbol-circle:hover {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px var(--primary-light);
-        }
-    </style>
-</head>
-
-<body id="kt_app_body" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" class="app-default">
-
-    <!-- Theme mode setup -->
-    <script>
-        var defaultThemeMode = "light";
-        var themeMode;
-        if (document.documentElement) {
-            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
-                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
-            } else {
-                if (localStorage.getItem("data-bs-theme") !== null) {
-                    themeMode = localStorage.getItem("data-bs-theme");
-                } else {
-                    themeMode = defaultThemeMode;
-                }
-            }
-            if (themeMode === "system") {
-                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-            }
-            document.documentElement.setAttribute("data-bs-theme", themeMode);
-        }
-    </script>
-
-    <!-- App Root -->
-    <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
-        <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
-            
-            <!-- Header -->
-            <div id="kt_app_header" class="app-header" data-kt-sticky="true" data-kt-sticky-activate-="true" data-kt-sticky-name="app-header-sticky" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
-                <div class="app-container container-xxl d-flex align-items-stretch justify-content-between" id="kt_app_header_container">
-                    
-                    @if(Auth::user()->role === 'utilisateur')
-                    <div id="kt_app_content_container" class="app-container container-xxl">
-                        <!-- Toolbar -->
-                        <div class="page-title d-flex flex-column justify-content-center me-3">
-                            <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-                                Mon Tableau de bord
-                            </h1>
-                            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-                                <li class="breadcrumb-item text-muted">Mes projets ajoutés</li>
-                            </ul>
-                        </div>
-
-                        <!-- Grille de projets -->
-                        <div class="row g-6 g-xl-9 mt-5">
-                            @foreach($projets as $projet)
-                            <div class="col-md-6 col-xl-4" id="projet-{{ $projet->id }}">
-                                <div class="card project-card border-hover-primary"
-                                     data-url="{{ route('utilisateur.projets.show', ['projet' => $projet->id, 'from' => 'dashboard']) }}"
-                                     style="cursor: pointer;">
-                                    
-                                    <!-- Header -->
-                                    <div class="card-header border-0 pt-9">
-                                        <div class="card-title m-0">
-                                            <div class="symbol symbol-50px w-50px bg-light">
-                                                @php
-                                                    $logo = ($projet->logo && file_exists(public_path($projet->logo))) 
-                                                        ? asset($projet->logo) 
-                                                        : asset('assets/media/svg/brand-logos/volicity-9.svg');
-                                                @endphp
-                                                <img src="{{ $logo }}" alt="logo" class="p-3" />
-                                            </div>
-                                        </div>
-                                        <div class="card-toolbar">
-                                            <span class="badge badge-light-{{ 
-                                                $projet->statut === 'en_production' ? 'danger' : 
-                                                ($projet->statut === 'en_developpement' ? 'warning' : 'success') 
-                                            }} fw-bold me-auto px-4 py-3">
-                                                {{ ucfirst(str_replace('_', ' ', $projet->statut)) }}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Body -->
-                                    <div class="card-body p-9">
-                                        <div class="fs-3 fw-bold text-gray-900">{{ $projet->nom }}</div>
-                                        <p class="text-gray-500 fw-semibold fs-5 mt-1 mb-7">
-                                            {{ Str::limit($projet->description, 100) }}
-                                        </p>
-
-                                        <!-- Actions -->
-                                        <div class="d-flex gap-2">
-                                            <form action="{{ route('utilisateur.projets.destroy', $projet->id) }}"
-                                                  method="POST"
-                                                  class="delete-form"
-                                                  data-id="{{ $projet->id }}"
-                                                  data-nom="{{ $projet->nom }}"
-                                                  data-url="{{ route('index') }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button"
-                                                        class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm btn-delete"
-                                                        data-bs-toggle="tooltip"
-                                                        title="Supprimer">
-                                                    <i class="ki-outline ki-trash fs-2"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-
-                </div>
-            </div>
-
-            <!-- Wrapper -->
-            <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
-                
-                <!-- Sidebar -->
-                <div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="280px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_toggle">
-                    
-                    <!-- Logo -->
-                    <div class="d-flex flex-stack px-4 px-lg-6 py-3 py-lg-8" id="kt_app_sidebar_logo">
-                        <a href="{{ route('index') }}">
-                            <img alt="Logo" src="assets/media/logos/logo-gs2e.svg" class="h-20px h-lg-25px" />
-                        </a>
-                        
-                        <!-- User Avatar -->
-                        <div class="ms-3">
-                            <a href="{{ route('utilisateur.monProfil') }}" class="cursor-pointer position-relative symbol symbol-circle symbol-40px">
-                                @php
-                                    $avatarPath = (Auth::user()->avatar && file_exists(public_path('avatars/' . Auth::user()->avatar)))
-                                        ? 'avatars/' . Auth::user()->avatar
-                                        : 'assets/media/avatars/blank.jpg';
-                                @endphp
-                                <img src="{{ asset($avatarPath) }}" alt="{{ Auth::user()->nom }}" class="w-100" />
-                                <div class="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Navigation -->
-                    <div class="flex-column-fluid px-4 px-lg-8 py-4" id="kt_app_sidebar_nav">
-                        <div id="kt_app_sidebar_nav_wrapper" class="d-flex flex-column pe-4 me-n4">
-                            
-                            <div class="d-flex flex-column gap-3 mt-5">
-                                @if(Auth::user()->role === 'admin')
-                                    <!-- Admin Links -->
-                                    <a href="{{ route('projet.index2') }}" class="btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center h-auto border-gray-200">
-                                        <span class="mb-2"><i class="ki-outline ki-briefcase fs-1"></i></span>
-                                        <span class="fs-7 fw-bold">Gestion des projets</span>
-                                    </a>
-
-                                    <a href="{{ route('utilisateur.index') }}" class="btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center h-auto border-gray-200">
-                                        <span class="mb-2"><i class="ki-outline ki-user fs-1"></i></span>
-                                        <span class="fs-7 fw-bold">Gestion des utilisateurs</span>
-                                    </a>
-
-                                    <a href="{{ route('environnements.index') }}" class="btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center h-auto border-gray-200">
-                                        <span class="mb-2"><i class="ki-outline ki-abstract-28 fs-1"></i></span>
-                                        <span class="fs-7 fw-bold">Gestion des Environnements</span>
-                                    </a>
-
-                                @elseif(Auth::user()->role === 'utilisateur')
-                                    <!-- User Links -->
-                                    <a href="{{ route('utilisateur.projets.index') }}" class="btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center h-auto border-gray-200">
-                                        <span class="mb-2"><i class="ki-outline ki-plus fs-1"></i></span>
-                                        <span class="fs-7 fw-bold">Ajouter un projet</span>
-                                    </a>
+														</div>
+														<!-- Fin de la carte -->
+													</div>
+												@endforeach
+											</div>
                                 @endif
-                            </div>
-                        </div>
-                    </div>
+											<!--end::Row-->
+                                         
+										</div>
+										<!--end::Content container-->
+									</div>
+                                
+									
 
-                    <!-- Footer / Logout -->
-                    <div class="flex-column-auto d-flex justify-content-end px-4 px-lg-8 py-3 py-lg-8" id="kt_app_sidebar_footer">
-                        <div class="menu-item px-3">
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-orange-primary fw-semibold w-100">
-                                    Déconnexion
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+								</div>
 
-                <!-- Main Content -->
-                <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
-                    <div class="d-flex flex-column flex-column-fluid">
-                        <div id="kt_app_content" class="app-content flex-column-fluid">
-                            
-                            @if(Auth::user()->role === 'admin')
-                            <div class="app-container container-xxl">
-                                <div class="row gx-6 gx-xl-9">
-                                    
-                                    <!-- Card Projets -->
-                                    <div class="col-lg-6 col-xxl-4 mb-5">
-                                        <div class="card stats-card h-100">
-                                            <div class="card-body p-9">
-                                                <div class="stats-number">{{ $totalProjets }}</div>
-                                                <div class="fs-4 fw-semibold text-gray-500 mb-7">Total des Projets</div>
+						<!--end::Header wrapper-->
 
-                                                <div class="d-flex flex-wrap">
-                                                    <div class="chart-container me-9 mb-5">
-                                                        <canvas id="kt_project_list_chart"></canvas>
-                                                    </div>
+					</div>
 
-                                                    <div class="d-flex flex-column justify-content-center flex-row-fluid pe-11 mb-5">
-                                                        <div class="d-flex fs-6 fw-semibold align-items-center mb-3">
-                                                            <div class="bullet bg-warning me-3" style="width: 12px; height: 12px; border-radius: 50%;"></div>
-                                                            <div class="text-gray-500">Développement</div>
-                                                            <div class="ms-auto fw-bold text-gray-700">{{ $statsProjets['developpement'] }}</div>
-                                                        </div>
-                                                        <div class="d-flex fs-6 fw-semibold align-items-center mb-3">
-                                                            <div class="bullet bg-success me-3" style="width: 12px; height: 12px; border-radius: 50%;"></div>
-                                                            <div class="text-gray-500">Recette</div>
-                                                            <div class="ms-auto fw-bold text-gray-700">{{ $statsProjets['recette'] }}</div>
-                                                        </div>
-                                                        <div class="d-flex fs-6 fw-semibold align-items-center">
-                                                            <div class="bullet bg-danger me-3" style="width: 12px; height: 12px; border-radius: 50%;"></div>
-                                                            <div class="text-gray-500">Production</div>
-                                                            <div class="ms-auto fw-bold text-gray-700">{{ $statsProjets['production'] }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+					<!--end::Header container-->
 
-                                                <!-- Derniers projets -->
-                                                <div class="mt-6">
-                                                    <div class="fw-bold text-gray-600 mb-3">Derniers Projets</div>
-                                                    @forelse($derniersProjets as $projet)
-                                                    <div class="d-flex align-items-center mb-3">
-                                                        <div class="symbol symbol-40px me-4">
-                                                            <img src="{{ $projet->logo && file_exists(public_path($projet->logo)) ? asset($projet->logo) : asset('assets/media/svg/brand-logos/volicity-9.svg') }}" class="rounded">
-                                                        </div>
-                                                        <div class="flex-grow-1">
-                                                            <div class="fw-semibold text-gray-800 fs-6">{{ $projet->nom }}</div>
-                                                            <div class="text-muted fs-7">{{ ucfirst(str_replace('_', ' ', $projet->statut)) }}</div>
-                                                        </div>
-                                                        <span class="badge 
-                                                            @if($projet->statut == 'en_developpement') badge-light-warning
-                                                            @elseif($projet->statut == 'en_recette') badge-light-success
-                                                            @elseif($projet->statut == 'en_production') badge-light-danger
-                                                            @else badge-light-secondary
-                                                            @endif fs-8 px-3 py-2">
-                                                            {{ ucfirst(str_replace('_', ' ', $projet->statut)) }}
-                                                        </span>
-                                                    </div>
-                                                    @empty
-                                                    <div class="text-muted fs-7">Aucun projet pour le moment</div>
-                                                    @endforelse
-                                                </div>
-                                            </div>
+				</div>
+
+				<!--end::Header-->
+
+				<!--begin::Wrapper-->
+
+				<div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+
+					<!--begin::Sidebar-->
+
+					<div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="275px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_toggle">
+
+						<!--begin::Logo-->
+
+						<div class="d-flex flex-stack px-4 px-lg-6 py-3 py-lg-8" id="kt_app_sidebar_logo">
+
+							<!--begin::Logo image-->
+
+							<a href="index.html">
+
+								<img alt="Logo" src="assets/media/logos/logo-gs2e.svg" class="h-20px h-lg-25px theme-light-show" />
+
+								<img alt="Logo" src="assets/media/logos/logo-gs2e.svg" class="h-20px h-lg-25px theme-dark-show" />
+
+							</a>
+
+							<!--end::Logo image-->
+
+							<!--begin::User menu-->
+
+							<div class="ms-3">
+
+								<!--begin::Menu wrapper-->
+
+								<div class="cursor-pointer position-relative symbol symbol-circle symbol-40px" 
+										data-kt-menu-trigger="{default: 'click', lg: 'hover'}" 
+										data-kt-menu-attach="parent" 
+										data-kt-menu-placement="bottom-end">
+
+
+										
+									<a href="{{ route('utilisateur.monProfil') }}" class="cursor-pointer position-relative symbol symbol-circle symbol-40px">
+										@php
+											$avatarPath = (Auth::user()->avatar && file_exists(public_path('avatars/' . Auth::user()->avatar)))
+												? 'avatars/' . Auth::user()->avatar
+												: 'assets/media/avatars/blank.jpg';
+										@endphp
+
+										<img src="{{ asset($avatarPath) }}" alt="{{ Auth::user()->nom }}" class="w-100" />
+										<div class="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
+									</a>
+								</div>
+
+								<!--begin::User account menu-->
+
+								<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px">
+
+									<!--begin::Menu item-->
+
+									<div class="menu-item px-3">
+
+										<div class="menu-content d-flex align-items-center px-3">
+
+											<!--begin::Avatar-->
+
+											
+
+											
+
+										</div>
+
+									</div>
+
+								
+
+								</div>
+
+								<!--end::User account menu-->
+
+								<!--end::Menu wrapper-->
+
+							</div>
+
+                                <!--end::User menu-->
+
+						</div>
+
+
+
+						<!--end::Logo-->
+
+						<!--begin::Sidebar nav-->
+
+						<div class="flex-column-fluid px-4 px-lg-8 py-4" id="kt_app_sidebar_nav">
+
+							<!--begin::Nav wrapper-->
+
+
+
+							<div id="kt_app_sidebar_nav_wrapper" class="d-flex flex-column  pe-4 me-n4" >
+								
+
+								<div class="mb-6">
+
+									<!--begin::Title-->
+
+									
+
+									<!--end::Title-->
+
+									<!--begin::Row-->
+
+
+
+                                <div class="container mt-5">
+
+    
+
+
+
+                                 <div class="d-flex flex-column gap mt-5">
+
+                                     @if(Auth::user()->role === 'admin')
+
+                                        <div class="col mb-4">
+
+                                             <a href="{{ route('projet.index2') }}" class="btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center w-lg-90px h-lg-90px w-70px h-70px border-gray-200" data-kt-button="true">
+
+                                                 <span class="mb-2">
+
+                                                      <i class="ki-outline ki-briefcase fs-1"></i>
+
+                                                 </span>
+
+                                                 <span class="fs-7 fw-bold">Gestion des projets</span>
+
+                                             </a>
+
                                         </div>
-                                    </div>
 
-                                    <!-- Card Accès -->
-                                    <div class="col-lg-6 col-xxl-4 mb-5">
-                                        <div class="card stats-card h-100">
-                                            <div class="card-body p-9">
-                                                <div class="stats-number">{{ $totalAcces }}</div>
-                                                <div class="fs-4 fw-semibold text-gray-500 mb-7">Total des Accès</div>
 
-                                                @foreach($accesParType as $type => $nombre)
-                                                <div class="fs-6 d-flex justify-content-between mb-4">
-                                                    <div class="fw-semibold">{{ ucfirst($type) }}</div>
-                                                    <div class="d-flex fw-bold text-gray-700">{{ $nombre }}</div>
-                                                </div>
-                                                <div class="separator separator-dashed"></div>
-                                                @endforeach
+										
 
-                                                <div class="mt-5">
-                                                    <div class="fw-bold text-gray-600 mb-3">Derniers Accès</div>
-                                                    @forelse($derniersAcces as $acces)
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <div>
-                                                            <div class="fw-semibold text-gray-800">{{ ucfirst($acces->type) }}</div>
-                                                            @if($acces->type === 'lien')
-                                                            <a href="{{ $acces->url }}" target="_blank" class="text-primary fs-7">
-                                                                {{ \Illuminate\Support\Str::limit($acces->url, 80) }}
-                                                            </a>
-                                                            @elseif($acces->type === 'identifiants')
-                                                            <div class="text-muted fs-7">Email : {{ $acces->email ?? 'N/A' }}</div>
-                                                            @endif
-                                                        </div>
-                                                        <span class="badge badge-light-primary fs-8">
-                                                            {{ $acces->created_at->diffForHumans() }}
-                                                        </span>
-                                                    </div>
-                                                    @empty
-                                                    <div class="text-muted">Aucun accès</div>
-                                                    @endforelse
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+								 
+			
 
-                                    <!-- Card Utilisateurs -->
-                                    <div class="col-lg-6 col-xxl-4 mb-5">
-                                        <div class="card stats-card h-100">
-                                            <div class="card-body p-9">
-                                                <div class="stats-number">{{ $totalUtilisateurs }}</div>
-                                                <div class="fs-4 fw-semibold text-gray-500 mb-7">Total des Utilisateurs</div>
+                                 <div class="col mb-4">
 
-                                                <div class="symbol-group symbol-hover mb-7">
-                                                    @foreach($utilisateurs as $u)
-                                                    <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="{{ $u->prenom }} {{ $u->nom }}">
-                                                        @if($u->avatar && file_exists(public_path('avatars/'.$u->avatar)))
-                                                        <img alt="Pic" src="{{ asset('avatars/'.$u->avatar) }}" />
-                                                        @else
-                                                        @php
-                                                            $initial = strtoupper(substr($u->prenom ?? $u->nom ?? 'U', 0, 1));
-                                                            $couleurs = ['primary', 'success', 'info', 'warning', 'danger', 'dark'];
-                                                            $bg = $couleurs[array_rand($couleurs)];
-                                                        @endphp
-                                                        <span class="symbol-label bg-{{ $bg }} text-inverse-{{ $bg }} fw-bold">{{ $initial }}</span>
-                                                        @endif
-                                                    </div>
-                                                    @endforeach
-                                                </div>
+                                     <a href="{{ route('utilisateur.index') }}" class="btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center w-lg-90px h-lg-90px w-70px h-70px border-gray-200" data-kt-button="true">
 
-                                                <div class="mt-5">
-                                                    <div class="fw-bold text-gray-600 mb-3">Derniers utilisateurs</div>
-                                                    @forelse($derniersUtilisateurs as $u)
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="symbol symbol-30px symbol-circle me-3">
-                                                                @if($u->avatar && file_exists(public_path('avatars/'.$u->avatar)))
-                                                                <img alt="Pic" src="{{ asset('avatars/'.$u->avatar) }}" />
-                                                                @else
-                                                                @php
-                                                                    $initial = strtoupper(substr($u->prenom ?? $u->nom ?? 'U', 0, 1));
-                                                                    $couleurs = ['primary', 'success', 'info', 'warning', 'danger', 'dark'];
-                                                                    $bg = $couleurs[array_rand($couleurs)];
-                                                                @endphp
-                                                                <span class="symbol-label bg-{{ $bg }} text-inverse-{{ $bg }} fw-bold">{{ $initial }}</span>
-                                                                @endif
-                                                            </div>
-                                                            <div>
-                                                                <div class="fw-semibold text-gray-800">{{ $u->prenom }} {{ $u->nom }}</div>
-                                                                <div class="text-muted fs-7">{{ $u->email }}</div>
-                                                            </div>
-                                                        </div>
-                                                        <span class="badge badge-light-primary fs-8">{{ $u->created_at->diffForHumans() }}</span>
-                                                    </div>
-                                                    @empty
-                                                    <div class="text-muted">Aucun utilisateur récent</div>
-                                                    @endforelse
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                         <span class="mb-2">
 
-                                    <!-- Card Environnements -->
-                                    <div class="col-lg-6 col-xxl-4 mb-5">
-                                        <div class="card stats-card h-100">
-                                            <div class="card-body p-9">
-                                                <div class="stats-number">{{ $totalEnvironnements }}</div>
-                                                <div class="fs-4 fw-semibold text-gray-500 mb-7">Total des Environnements</div>
+                                             <i class="ki-outline ki-user fs-1"></i>
 
-                                                <div class="mt-5">
-                                                    <div class="fw-bold text-gray-600 mb-3">Derniers Environnements</div>
-                                                    @forelse($derniersEnvironnements as $environnement)
-                                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                                        <span class="badge badge-light-{{ $environnement->couleur ?? 'secondary' }}">
-                                                            {{ $environnement->libelle ?? 'Non défini' }}
-                                                        </span>
-                                                        <span class="badge badge-light-primary fs-8">
-                                                            {{ $environnement->created_at->diffForHumans() }}
-                                                        </span>
-                                                    </div>
-                                                    @empty
-                                                    <div class="text-muted">Aucun environnement</div>
-                                                    @endforelse
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                          </span>
+
+                                         <span class="fs-7 fw-bold">Gestion des utilisateurs</span>
+
+                                     </a>
+
+                                 </div>
+
+		
+
+								 <div class="col mb-4">
+
+										<a href="{{ route('environnements.index') }}" class="btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center w-lg-90px h-lg-90px w-70px h-70px border-gray-200" data-kt-button="true">
+
+												<span class="mb-2">
+
+													<i class="ki-outline ki-abstract-28 fs-1"></i>
+
+												</span>
+
+											<span class="fs-7 fw-bold">Gestion des Environnements</span>
+
+										</a>
+
+										</div>
+
+
+                                  @elseif(Auth::user()->role === 'utilisateur')
+
+										<div class="col mb-4">
+
+											<a href="{{ route('utilisateur.projets.index') }}" class="btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center w-lg-90px h-lg-90px w-70px h-70px border-gray-200" data-kt-button="true">
+
+												<span class="mb-2">
+
+													<i class="ki-outline ki-plus fs-1"></i>
+
+												</span>
+
+												<span class="fs-7 fw-bold">Ajouter un projet</span>
+
+											</a>
+
+										</div>
+
+                                    @endif
 
                                 </div>
+
+
+
                             </div>
-                            @endif
 
-                        </div>
-                    </div>
-                </div>
 
-            </div>
-        </div>
-    </div>
 
-    <!-- Scripts -->
+
+
+							  			
+
+									</div>
+
+
+
+									<!--end::Row-->
+
+								</div>
+
+								                     </div>
+
+                     <div class="flex-column-auto d-flex justify-content-end px-4 px-lg-8 py-3 py-lg-8" id="kt_app_sidebar_footer">
+
+						     
+
+				<div class="menu-item px-3">
+
+					<form action="{{ route('logout') }}" method="POST">
+
+						@csrf
+
+						<button type="submit" class="btn btn-sm  btn-light btn-orange-primary fw-semibold me-2" data-bs-toggle="modal" >
+
+							Déconnexion
+
+						</button>
+
+					</form>
+
+				</div>
+
+					
+
+							<!--begin::Settings-->
+
+								<!--end::Links-->
+
+							</div>
+
+					<!--end::Nav wrapper-->
+
+						</div>
+
+						<!--end::Sidebar nav-->
+
+						<!--begin::Footer-->
+
+					
+
+					<!--end::Sidebar-->
+
+					<!--begin::Main-->
+
+								<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+
+									<!--begin::Content wrapper-->
+									@if(Auth::user()->role === 'admin')
+									<div class="d-flex flex-column flex-column-fluid">
+
+										<!--begin::Content-->
+
+										<div id="kt_app_content" class="app-content flex-column-fluid">
+
+											<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+									   <!--begin::Content wrapper-->
+									     <div class="d-flex flex-column flex-column-fluid">
+										<!--begin::Content-->
+										<div id="kt_app_content" class="app-content flex-column-fluid">
+											<!--begin::Content container-->
+											<div id="kt_app_content_container1" class="app-container container-xxl">
+												<div class="row gx-6 gx-xl-9">
+													<div class="col-lg-6 col-xxl-4 mb-5">
+														<div class="card h-100">
+															<div class="card-body p-9">
+																
+																<!-- Total projets -->
+																<div class="fs-2hx fw-bold">{{ $totalProjets }}</div>
+																<div class="fs-4 fw-semibold text-gray-500 mb-7">Total des Projets</div>
+
+																<!-- Graphique + Statistiques -->
+																<div class="d-flex flex-wrap">
+																	<!-- Chart -->
+																	<div class="d-flex flex-center h-100px w-100px me-9 mb-5">
+																		<canvas id="kt_project_list_chart" width="150" height="150"></canvas>
+																	</div>
+
+																	<!-- Labels -->
+																	<div class="d-flex flex-column justify-content-center flex-row-fluid pe-11 mb-5">
+																		<div class="d-flex fs-6 fw-semibold align-items-center mb-3">
+																			<div class="bullet bg-warning me-3"></div>
+																			<div class="text-gray-500">Développement</div>
+																			<div class="ms-auto fw-bold text-gray-700">{{ $statsProjets['developpement'] }}</div>
+																		</div>
+																		<div class="d-flex fs-6 fw-semibold align-items-center mb-3">
+																			<div class="bullet bg-success me-3"></div>
+																			<div class="text-gray-500">Recette</div>
+																			<div class="ms-auto fw-bold text-gray-700">{{ $statsProjets['recette'] }}</div>
+																		</div>
+																		<div class="d-flex fs-6 fw-semibold align-items-center">
+																			<div class="bullet bg-danger me-3"></div>
+																			<div class="text-gray-500">Production</div>
+																			<div class="ms-auto fw-bold text-gray-700">{{ $statsProjets['production'] }}</div>
+																		</div>
+																	</div>
+																</div>
+
+																<!-- 🆕 Derniers projets créés -->
+																<div class="mt-6">
+																	<div class="fw-bold text-gray-600 mb-3">Derniers Projets</div>
+
+																	@forelse($derniersProjets as $projet)
+																		<div class="d-flex align-items-center mb-3">
+																			<!-- Logo du projet -->
+																			<div class="symbol symbol-40px me-4">
+																				<img src="{{ $projet->logo && file_exists(public_path($projet->logo)) ? asset($projet->logo) : asset('assets/media/svg/brand-logos/volicity-9.svg') }}" class="rounded">
+																			</div>
+
+																			<!-- Infos du projet -->
+																			<div class="flex-grow-1">
+																				<div class="fw-semibold text-gray-800 fs-6">{{ $projet->nom }}</div>
+																				<div class="text-muted fs-7">{{ ucfirst(str_replace('_', ' ', $projet->statut)) }}</div>
+																			</div>
+
+																			<!-- Badge statut visuel -->
+																			<span class="badge 
+																				@if($projet->statut == 'en_developpement') badge-light-warning
+																				@elseif($projet->statut == 'en_recette') badge-light-success
+																				@elseif($projet->statut == 'en_production') badge-light-danger
+																				@else badge-light-secondary
+																				@endif fs-8 px-3 py-2">
+																				{{ ucfirst(str_replace('_', ' ', $projet->statut)) }}
+																			</span>
+																		</div>
+																	@empty
+																		<div class="text-muted fs-7">Aucun projet pour le moment</div>
+																	@endforelse
+																</div>
+
+															</div>
+														</div>
+													</div>
+
+												
+
+													<div class="col-lg-6 col-xxl-4 mb-5">
+														<!--begin::Accès Card-->
+														<div class="card h-100">
+															<div class="card-body p-9">
+																
+																<!--  Total accès -->
+																<div class="fs-2hx fw-bold">{{ $totalAcces }}</div>
+																<div class="fs-4 fw-semibold text-gray-500 mb-7">Total des Accès</div>
+
+																<!--  Nombres par type -->
+																@foreach($accesParType as $type => $nombre)
+																	<div class="fs-6 d-flex justify-content-between mb-4">
+																		<div class="fw-semibold">{{ ucfirst($type) }}</div>
+																		<div class="d-flex fw-bold text-gray-700">{{ $nombre }}</div>
+																	</div>
+																	<div class="separator separator-dashed"></div>
+																@endforeach
+
+																<!--  Derniers accès créés -->
+																<div class="mt-5">
+																	<div class="fw-bold text-gray-600 mb-3">Derniers Accès</div>
+
+																	@forelse($derniersAcces as $acces)
+																		<div class="d-flex justify-content-between align-items-center mb-3">
+																			<div>
+																				<div class="fw-semibold text-gray-800">{{ ucfirst($acces->type) }}</div>
+																				
+																				@if($acces->type === 'lien')
+																					<!-- Si c’est un lien -->
+																					<a href="{{ $acces->url }}" target="_blank" class="text-primary fs-7">
+																						{{ \Illuminate\Support\Str::limit($acces->url, 80) }}
+																					</a>
+																				@elseif($acces->type === 'identifiants')
+																					<!-- Si c’est des identifiants -->
+																					<div class="text-muted fs-7">
+																						Email : {{ $acces->email ?? 'N/A' }}
+																					</div>
+																					<div class="text-muted fs-7">
+																						Mot de passe : {{ $acces->mot_de_passe ?? 'N/A' }}
+																					</div>
+																				@else
+																					<div class="text-muted fs-7">N/A</div>
+																				@endif
+																			</div>
+
+																			<!-- Temps relatif -->
+																			<span class="badge badge-light-primary fs-8">
+																				{{ $acces->created_at->diffForHumans() }}
+																			</span>
+																		</div>
+																	@empty
+																		<div class="text-muted">Aucun accès pour le moment</div>
+																	@endforelse
+																</div>
+
+															</div>
+														</div>
+														<!--end::Accès Card-->
+													</div>
+												
+												
+
+													<div class="col-lg-6 col-xxl-4 mb-5">
+														<div class="card h-100">
+															<div class="card-body p-9">
+																<!-- Nombre total -->
+																<div class="fs-2hx fw-bold">{{ $totalUtilisateurs }}</div>
+																<div class="fs-4 fw-semibold text-gray-500 mb-7">Total des Utilisateurs</div>
+
+																<!-- Groupe d'utilisateurs -->
+																<div class="symbol-group symbol-hover mb-7">
+																	@foreach($utilisateurs as $u)
+																		<div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="{{ $u->prenom }} {{ $u->nom }}">
+																			@if($u->avatar && file_exists(public_path('avatars/'.$u->avatar)))
+																				<img alt="Pic" src="{{ asset('avatars/'.$u->avatar) }}" />
+																			@else
+																				@php
+																					$initial = strtoupper(substr($u->prenom ?? $u->nom ?? 'U', 0, 1));
+																					$couleurs = ['primary', 'success', 'info', 'warning', 'danger', 'dark'];
+																					$bg = $couleurs[array_rand($couleurs)];
+																				@endphp
+																				<span class="symbol-label bg-{{ $bg }} text-inverse-{{ $bg }} fw-bold">{{ $initial }}</span>
+																			@endif
+																		</div>
+																	@endforeach
+
+																	@if($totalUtilisateurs > count($utilisateurs))
+																		<a href="{{ route('utilisateur.index') }}" class="symbol symbol-35px symbol-circle">
+																			<span class="symbol-label bg-dark text-gray-300 fs-8 fw-bold">+{{ $totalUtilisateurs - count($utilisateurs) }}</span>
+																		</a>
+																	@endif
+																</div>
+
+																<!-- Derniers utilisateurs créés -->
+																<div class="mt-5">
+																	<div class="fw-bold text-gray-600 mb-3">Derniers utilisateurs</div>
+																	@forelse($derniersUtilisateurs as $u)
+																		<div class="d-flex justify-content-between align-items-center mb-3">
+																			<div class="d-flex align-items-center">
+																				<div class="symbol symbol-30px symbol-circle me-3">
+																					@if($u->avatar && file_exists(public_path('avatars/'.$u->avatar)))
+																						<img alt="Pic" src="{{ asset('avatars/'.$u->avatar) }}" />
+																					@else
+																						@php
+																							$initial = strtoupper(substr($u->prenom ?? $u->nom ?? 'U', 0, 1));
+																							$couleurs = ['primary', 'success', 'info', 'warning', 'danger', 'dark'];
+																							$bg = $couleurs[array_rand($couleurs)];
+																						@endphp
+																						<span class="symbol-label bg-{{ $bg }} text-inverse-{{ $bg }} fw-bold">{{ $initial }}</span>
+																					@endif
+																				</div>
+																				<div>
+																					<div class="fw-semibold text-gray-800">{{ $u->prenom }} {{ $u->nom }}</div>
+																					<div class="text-muted fs-7">{{ $u->email }}</div>
+																				</div>
+																			</div>
+																			<span class="badge badge-light-primary fs-8">{{ $u->created_at->diffForHumans() }}</span>
+																		</div>
+																	@empty
+																		<div class="text-muted">Aucun utilisateur récent</div>
+																	@endforelse
+																</div>
+
+																<!-- Actions -->
+																
+															</div>
+														</div>
+													</div>
+
+
+													<div class="col-lg-6 col-xxl-4 mb-5">
+														<!--begin::Environnements Card-->
+														<div class="card h-100">
+															<div class="card-body p-9">
+
+																<!--  Total environnements -->
+																<div class="fs-2hx fw-bold">{{ $totalEnvironnements }}</div>
+																<div class="fs-4 fw-semibold text-gray-500 mb-7">Total des Environnements</div>
+
+																<!--  Derniers environnements créés -->
+																<div class="mt-5">
+																	<div class="fw-bold text-gray-600 mb-3">Derniers Environnements</div>
+
+																	@forelse($derniersEnvironnements as $environnement)
+																		<div class="d-flex justify-content-between align-items-center mb-3">
+																			<div>
+																				
+																				<span class="badge badge-light-{{ $environnement->couleur ?? 'secondary' }}">
+																					{{ $environnement->libelle ?? 'Non défini' }}
+																				</span>
+																			</div>
+																			<!-- Temps relatif -->
+																			<span class="badge badge-light-primary fs-8">
+																				{{ $environnement->created_at->diffForHumans() }}
+																			</span>
+																		</div>
+																	@empty
+																		<div class="text-muted">Aucun environnement pour le moment</div>
+																	@endforelse
+																</div>
+
+																<!-- Actions -->
+																
+
+															</div>
+														</div>
+														<!--end::Environnements Card-->
+													</div>
+
+
+
+												</div>
+												<!--end::Row-->
+												<!--begin::Row-->
+												<!--end::Row-->
+											</div>
+											<!--end::Content container-->
+										</div>
+										<!--end::Content-->
+									</div>
+									@endif
+								</div>
+
+								
+
+								<!--end::Content container-->
+
+							</div>
+
+							<!--end::Content-->
+
+						</div>
+
+						<!--end::Content wrapper-->
+
+						
+
+					</div>
+
+					<!--end:::Main-->
+
+				</div>
+				
+
+				<!--end::Wrapper-->
+
+			</div>
+
+			<!--end::Page-->
+
+		</div>
+
+		<!--end::App-->
+
+		<!--begin::Drawers-->
+
+		<!--begin::Activities drawer-->
+
+		
+
+		<!--end::Modal - Invite Friend-->
+
+		<!--end::Modals-->
+
+		<!--begin::Javascript-->
+
+		<script>var hostUrl = "assets/";</script>
+
+		<!--begin::Global Javascript Bundle(mandatory for all pages)-->
+		<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const canvas = document.getElementById('kt_project_list_chart');
+    if (!canvas) {
+        console.error('Canvas non trouvé');
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+
+    const data = {
+        labels: ['Développement', 'Recette', 'Production'],
+        datasets: [{
+            data: [
+                {{ $statsProjets['developpement'] ?? 0 }},
+                {{ $statsProjets['recette'] ?? 0 }},
+                {{ $statsProjets['production'] ?? 0 }}
+            ],
+            backgroundColor: ['#FFC107', '#28A745', '#DC3545']
+        }]
+    };
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: data,
+        options: {
+            responsive: true,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+});
+</script>
+
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
+
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
-    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-    
-    <!-- Chart.js - IMPORTANT: Charger depuis CDN pour garantir qu'il fonctionne en production -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-    @if(Auth::user()->role === 'admin')
-    <script>
-        // Initialisation du Chart après chargement complet du DOM et de Chart.js
-        document.addEventListener('DOMContentLoaded', function () {
-            // Vérifier que Chart.js est chargé
-            if (typeof Chart === 'undefined') {
-                console.error('Chart.js non chargé');
-                return;
-            }
+		<!--end::Global Javascript Bundle-->
 
-            const canvas = document.getElementById('kt_project_list_chart');
-            if (!canvas) {
-                console.error('Canvas non trouvé');
-                return;
-            }
+		<!--begin::Vendors Javascript(used for this page only)-->
 
-            const ctx = canvas.getContext('2d');
+		<script src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
 
-            const data = {
-                labels: ['Développement', 'Recette', 'Production'],
-                datasets: [{
-                    data: [
-                        {{ $statsProjets['developpement'] ?? 0 }},
-                        {{ $statsProjets['recette'] ?? 0 }},
-                        {{ $statsProjets['production'] ?? 0 }}
-                    ],
-                    backgroundColor: ['#FFC107', '#28A745', '#DC3545'],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            };
+		<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    cutout: '70%',
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
-                            borderRadius: 8,
-                            titleFont: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            bodyFont: {
-                                size: 13
-                            }
-                        }
-                    },
-                    animation: {
-                        animateRotate: true,
-                        animateScale: true,
-                        duration: 1000,
-                        easing: 'easeInOutQuart'
-                    }
-                }
-            });
-        });
-    </script>
-    @endif
+		<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 
-    @if(Auth::user()->role === 'utilisateur')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        // Gestion de la suppression de projet
-        $(document).on('click', '.btn-delete', function (e) {
-            e.stopPropagation();
-            e.preventDefault();
+		<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
 
-            let form = $(this).closest('form');
-            let id = form.data('id');
-            let nom = form.data('nom');
-            let url = form.attr('action');
+		<script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
 
-            Swal.fire({
-                title: 'Êtes-vous sûr de vouloir supprimer ' + nom + ' ?',
-                text: "Cette action est irréversible.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Oui, supprimer !',
-                cancelButtonText: 'Annuler',
-                customClass: {
-                    confirmButton: 'btn btn-danger',
-                    cancelButton: 'btn btn-secondary'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        data: form.serialize(),
-                        success: function () {
-                            Swal.fire(
-                                'Supprimé !',
-                                nom + ' a bien été supprimé.',
-                                'success'
-                            ).then(() => {
-                                window.location.href = form.data('url');
-                            });
-                        },
-                        error: function () {
-                            Swal.fire(
-                                'Erreur',
-                                'Impossible de supprimer ' + nom,
-                                'error'
-                            );
-                        }
+		<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+		<script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+
+		<script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+
+		<script src="https://cdn.amcharts.com/lib/5/geodata/continentsLow.js"></script>
+
+		<script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
+
+		<script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
+
+		<script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
+
+		 <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+
+		<!--end::Vendors Javascript-->
+
+		<!--begin::Custom Javascript(used for this page only)-->
+
+		 <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
+
+    <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
+
+	<script src="{{ asset('assets/js/custom/apps/chat/chat.js') }}"></script>
+
+		<script src="{{ asset('assets/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
+
+		<script src="{{ asset('assets/js/custom/utilities/modals/users-search.js') }}"></script>
+
+		
+
+		<!--end::Custom Javascript-->
+
+		<!--end::Javascript-->
+	@if(Auth::user()->role==='utilisateur')
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+			<script>
+				$(document).on('click', '.btn-delete', function (e) {
+    e.stopPropagation(); // empêche le clic parent de déclencher la redirection
+    e.preventDefault();
+
+    let form = $(this).closest('form');
+    let id = form.data('id');
+    let nom = form.data('nom');
+    let url = form.attr('action');
+
+    Swal.fire({
+        title: 'Êtes-vous sûr de vouloir supprimer ' + nom + ' ?',
+        text: "Cette action est irréversible.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, supprimer !',
+        cancelButtonText: 'Annuler',
+        customClass: {
+            confirmButton: 'btn btn-danger',
+            cancelButton: 'btn btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: form.serialize(),
+                success: function () {
+                    Swal.fire(
+                        'Supprimé !',
+                        nom + ' a bien été supprimé.',
+                        'success'
+                    ).then(() => {
+                        window.location.href = form.data('url');
                     });
+                },
+                error: function () {
+                    Swal.fire(
+                        'Erreur',
+                        'Impossible de supprimer ' + nom,
+                        'error'
+                    );
                 }
             });
-        });
+        }
+    });
+});
 
-        // Redirection au clic sur la carte
-        document.addEventListener('DOMContentLoaded', function () {
-            const projectCards = document.querySelectorAll('.project-card');
-            
-            projectCards.forEach(card => {
-                card.addEventListener('click', function (event) {
-                    if (event.target.closest('button')) return;
-                    
-                    const url = this.getAttribute('data-url');
-                    if (url) {
-                        window.location.href = url;
-                    }
-                });
-            });
-        });
-    </script>
-    @endif
 
-</body>
+document.addEventListener('DOMContentLoaded', function () {
+    const projectCards = document.querySelectorAll('.project-card');
+
+    projectCards.forEach(card => {
+        card.addEventListener('click', function (event) {
+            // si clic sur un bouton => on ne redirige pas
+            if (event.target.closest('button')) return;
+
+            const url = this.getAttribute('data-url');
+            if (url) {
+                window.location.href = url;
+            }
+        });
+    });
+});
+
+
+
+document.querySelectorAll('.project-clickable').forEach(card => {
+    card.addEventListener('click', function() {
+        window.location.href = this.dataset.url;
+    });
+});
+
+
+
+
+</script>
+
+
+
+
+
+			
+       @endif
+
+	</body>
+
+	<!--end::Body-->
+
 </html>
