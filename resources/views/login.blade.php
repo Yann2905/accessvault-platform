@@ -345,7 +345,7 @@
 <div class="login-container">
     <div class="login-header">
         <div class="logo-container">
-            <img src="{{ asset('assets/media/logos/logo-gs2e.svg') }}" alt="GS2E Logo">
+            <img src="assets/media/logos/logo-gs2e.svg" alt="GS2E Logo">
         </div>
         <h1>Bienvenue</h1>
         <p>Connectez-vous à votre espace pour accéder à vos services</p>
