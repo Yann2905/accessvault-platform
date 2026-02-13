@@ -371,7 +371,7 @@
             </div>
             @endif
 
-            <form method="POST" action="{{ route('login.post') }}" class="form w-100" id="kt_sign_in_form">
+            <form method="POST" action="{{ route('login.post') }}"  id="kt_sign_in_form">
                 @csrf
 
                 <div class="form-group">
@@ -395,8 +395,8 @@
                     <div class="input-wrapper password-wrapper">
                         <input 
                             type="password" 
-                            id="password" 
-                            name="password" 
+                            id="mot_de_passe" 
+                            name="mot_de_passe" 
                             placeholder="••••••••"
                             required
                         >
@@ -412,10 +412,6 @@
                 <button type="submit" class="btn-login">
                     Se connecter
                 </button>
-
-                <div class="login-footer">
-                    <a href="#">Mot de passe oublié ?</a>
-                </div>
             </form>
         </div>
     </div>
