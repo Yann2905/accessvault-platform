@@ -371,7 +371,7 @@
             </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" id="loginForm">
+            <form method="POST" action="{{ route('login.post') }}" class="form w-100" id="kt_sign_in_form">
                 @csrf
 
                 <div class="form-group">
